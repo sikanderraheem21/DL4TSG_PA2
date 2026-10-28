@@ -21,16 +21,18 @@ import torch
 
 from q2.data import GROUP, SPLITS, apply_g, load_videos, make_windows, sample_windows
 from q2.evaluate import error_summary, per_video_horizon_mse, predict_windows
-from q2.models import build, n_params
+from q2.models import D_CANDIDATES, D_CHOICE, build, n_params
 
 # model -> (architecture, window regime, symmetry augmentation)
 EXPERIMENTS = {
     "A": ("A", "normal", False),
     "B": ("A", "normal", True),
     "C": ("A", "speed", False),
-    "D": ("D", "speed", False),
-    "DB": ("D", "speed", True),
+    "D": (D_CHOICE, "speed", False),
+    "DB": (D_CHOICE, "speed", True),
 }
+# Model D candidates, trained like C (speed augmentation) for the validation comparison.
+EXPERIMENTS |= {name: (name, "speed", False) for name in D_CANDIDATES}
 
 
 def pick_device(name):
@@ -88,6 +90,9 @@ def main():
     args = parser.parse_args()
 
     architecture, regime, symmetric = EXPERIMENTS[args.model]
+    if architecture is None:
+        raise SystemExit("Model D is not chosen yet: train the D candidates, run "
+                         "`python -m q2.select_d`, then set D_CHOICE in q2/models.py.")
     device = pick_device(args.device)
     tag = f"{args.model}_s{args.seed}"
     ckpt_dir, log_dir = Path(args.ckpt_dir), Path(args.log_dir)

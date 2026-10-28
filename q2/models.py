@@ -86,14 +86,43 @@ class CopyLast(nn.Module):
         return x[:, -1:].expand(-1, n_out, -1, -1, -1).clone()
 
 
-# Model D candidates are added here once chosen on the validation split (Q2.12).
+# Model D candidates: strictly larger one-step reach than A, at most 721,176
+# parameters (1.5 x A), no attention. Compared on the validation split only.
+#
+#   name       change vs A                           reach (px/step)
+#   A          -                                     4 * (1 + 1) = 8
+#   Ddil12     layer-2 convolution dilated by 2      4 * (1 + 2) = 12
+#   Ddil22     both convolutions dilated by 2        4 * (2 + 2) = 16
+#   Dpatch8    8x8 patches (8x8 grid, 64 channels)   8 * (1 + 1) = 16
+#   D3layer    three ConvLSTM layers, 56 channels    4 * (1+1+1) = 12
 ARCHITECTURES = {
     "A": dict(patch=4, hidden=64, kernels=(3, 3), dilations=(1, 1)),
+    "Ddil12": dict(patch=4, hidden=64, kernels=(3, 3), dilations=(1, 2)),
+    "Ddil22": dict(patch=4, hidden=64, kernels=(3, 3), dilations=(2, 2)),
+    "Dpatch8": dict(patch=8, hidden=64, kernels=(3, 3), dilations=(1, 1)),
+    "D3layer": dict(patch=4, hidden=56, kernels=(3, 3, 3), dilations=(1, 1, 1)),
 }
+D_CANDIDATES = ("Ddil12", "Ddil22", "Dpatch8", "D3layer")
+D_CHOICE = None  # set from q2.select_d (validation split only)
+MAX_D_PARAMS = 721_176
 
 
 def build(name):
     return ConvLSTMForecaster(**ARCHITECTURES[name])
+
+
+def reach_pixels(patch, kernels, dilations, **_):
+    """Longest distance (original pixels, centre to centre) information can move
+    within one rollout step.
+
+    Every path inside one step enters at some layer l (from the new input, or
+    from that layer's previous hidden state) and then passes through the spatial
+    convolutions of layers l..L, each moving it dilation * (kernel // 2) grid
+    cells. The longest path enters at layer 1, so the reach is the sum over all
+    layers, times the patch width. The 1x1 readout and the (un)shuffles add
+    nothing, and the cell state is updated pointwise.
+    """
+    return patch * sum(d * (k // 2) for k, d in zip(kernels, dilations))
 
 
 def n_params(model):
