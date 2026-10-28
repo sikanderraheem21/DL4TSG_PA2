@@ -1,0 +1,27 @@
+{
+  "figure3": [
+    {
+      "transform": "M",
+      "video": 9348
+    },
+    {
+      "transform": "M",
+      "video": 9995
+    },
+    {
+      "transform": "R",
+      "video": 9227
+    },
+    {
+      "transform": "R",
+      "video": 9143
+    }
+  ],
+  "figure3_gifs": [
+    "results/gifs/figure3a_M_video9348.gif",
+    "results/gifs/figure3b_M_video9995.gif",
+    "results/gifs/figure3c_R_video9227.gif",
+    "results/gifs/figure3d_R_video9143.gif"
+  ],
+  "figure5_video": 9017
+}
