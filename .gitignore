@@ -1,0 +1,22 @@
+# Course material (not submitted)
+Question1/
+DL4STG_PA2.pdf
+
+# Data (re-downloaded by torchvision)
+data/
+
+# Environments and caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.fdb_latexmk
+*.fls
