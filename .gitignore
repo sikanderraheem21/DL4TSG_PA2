@@ -23,3 +23,6 @@ __pycache__/
 
 # Overleaf upload bundle (rebuilt from report/)
 overleaf_upload.zip
+
+# Report source (kept locally, not committed)
+report/

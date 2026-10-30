@@ -6,7 +6,6 @@ Muhammad Sikander Raheem (25280017), LUMS, Fall 2026.
 
 | Path | What it is |
 |---|---|
-| `report/Q1_report.tex` | Question 1: river forecasting proposal (LaTeX, compiles on Overleaf) |
 | `predictions/` | Q2.5 and Q2.11 predictions, each committed before the experiment it predicts |
 | `q2/` | Question 2 code: data, transforms, models, training, evaluation, figures |
 | `results/tables/` | Tables 1–6 as CSV/JSON |
