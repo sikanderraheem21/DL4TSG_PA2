@@ -103,7 +103,7 @@ ARCHITECTURES = {
     "D3layer": dict(patch=4, hidden=56, kernels=(3, 3, 3), dilations=(1, 1, 1)),
 }
 D_CANDIDATES = ("Ddil12", "Ddil22", "Dpatch8", "D3layer")
-D_CHOICE = None  # set from q2.select_d (validation split only)
+D_CHOICE = "Ddil12"  # chosen by q2.select_d on the validation split (results/tables/model_d_selection_val.json)
 MAX_D_PARAMS = 721_176
 
 
