@@ -20,3 +20,6 @@ __pycache__/
 *.synctex.gz
 *.fdb_latexmk
 *.fls
+
+# Overleaf upload bundle (rebuilt from report/)
+overleaf_upload.zip
